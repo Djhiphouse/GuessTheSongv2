@@ -1,4 +1,5 @@
 <div>
+    @dd(\App\Models\Chat::getChatMessages())
     <div wire:poll.750ms class="w-full h-full flex flex-row space-x-2">
        <div  id="PlayerBox" class=" mx-3 my-3 h-full w-auto flex flex-col items-center border border-black space-y-1 rounded-xl">
            <div class="w-full h-auto flex justify-center items-center border-b border-black">
