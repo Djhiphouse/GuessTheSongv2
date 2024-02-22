@@ -32,7 +32,7 @@
                 <h1 class="font-bold">Welcher Song ist das?</h1>
             </div>
             <script>
-                var webSocket = new WebSocket("ws://localhost:8080/ws");
+                var webSocket = new WebSocket("ws://45.142.115.11:8085/ws");
                 webSocket.onmessage = function(event) {
                     console.log(event.data);
                    console.log("WS: " + event.data);
