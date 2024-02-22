@@ -14,7 +14,6 @@ class Chat extends Model
     public static function getChatMessages(){
         $result = DB::table('chats')
             ->join('game_users', 'game_users.id', '=', 'chats.userid')
-            ->where('game_users.id', '=', 3)
             ->get();
 
         return $result;
