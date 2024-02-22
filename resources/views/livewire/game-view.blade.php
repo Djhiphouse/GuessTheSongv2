@@ -66,7 +66,7 @@
             </div>
 
             <div class="overflow-y-auto h-64 w-full flex flex-col-reverse">
-                @foreach(\App\Models\Chat::getChatMessages() as $message)
+                @foreach(\App\Models\Chat::getChatMessages()->reverse() as $message)
                     <div class="w-full flex flex-row mx-2 my-1">
                         @if($message->correct == 1)
                             <div class="w-8 h-8 rounded-full bg-green-700 flex flex-row justify-center items-center mx-2">
