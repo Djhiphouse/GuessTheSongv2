@@ -17,6 +17,8 @@ class Song extends Model
             ->first();
     }
 
+
+
     public static function resetSong(){
         return Song::query()
             ->where('used', 0)

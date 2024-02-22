@@ -10,51 +10,30 @@ use Livewire\Component;
 
 class GameView extends Component
 {
-
-
     public $message;
+    public $videoId;
+    public $textToGuess;
+    public $win = false;
+
     public function render()
     {
         $messages = Chat::getChatMessages();
         return view('livewire.game-view', ['messages' => $messages]);
     }
-    public $videoId;
-    public $textToGuess;
-    public $win = false;
 
     public function mount()
     {
         GameUser::updateUsers(1);
-        if (!Song::checkSongExist()){
-            $playlistId = 'PLs7O5xs_w0WkRuh6w6gQcri57OwAZiHrf';
-            $apiKey = 'AIzaSyDiOb5xLvDzMJ32E8sbPHdQHRh1zGv8cY4';
 
-            $response = Http::get('https://www.googleapis.com/youtube/v3/playlistItems', [
-                'part' => 'snippet',
-                'playlistId' => $playlistId,
-                'maxResults' => 50, // Adjust this according to your playlist size
-                'key' => $apiKey,
-            ]);
-
-            $videos = $response->json()['items'];
-            $randomVideo = $videos[array_rand($videos)];
-            $this->videoId = $randomVideo['snippet']['resourceId']['videoId'];
-            $this->textToGuess = $randomVideo['snippet']['title'];
-            Song::insertSongToDatabase($this->videoId, $this->textToGuess);
+        if (!Song::checkSongExist()) {
+            $this->fetchNewSong();
+        } else {
+            $this->loadCurrentSong();
         }
-
-
-
-            $currentsong = Song::getSong();
-            $this->textToGuess = $currentsong->textToGuess;
-            $this->videoId = $currentsong->videoID;
-
-
-
     }
 
-
-    public function sendMsg(){
+    public function sendMsg()
+    {
         $position = stripos(strtolower($this->textToGuess), strtolower($this->message));
         if ($position !== false) {
             Chat::sendChatMessage($this->message, 1);
@@ -64,12 +43,19 @@ class GameView extends Component
         }
     }
 
-    public function resetSong(){
+    public function resetSong()
+    {
         Song::resetSong();
         GameUser::resetAllUser();
         Chat::resetChatMessages();
+        $this->fetchNewSong();
+    }
+
+    // Method to fetch a new song from YouTube playlist
+    public function fetchNewSong()
+    {
         $playlistId = 'PLs7O5xs_w0WkRuh6w6gQcri57OwAZiHrf';
-        $apiKey = 'AIzaSyDiOb5xLvDzMJ32E8sbPHdQHRh1zGv8cY4';
+        $apiKey = 'AIzaSyDiOb5xLvDzMJ32E8sbPHdQHRh1zGv8cY4'; // Replace with your actual API key
 
         $response = Http::get('https://www.googleapis.com/youtube/v3/playlistItems', [
             'part' => 'snippet',
@@ -83,12 +69,24 @@ class GameView extends Component
         $this->videoId = $randomVideo['snippet']['resourceId']['videoId'];
         $this->textToGuess = $randomVideo['snippet']['title'];
         Song::insertSongToDatabase($this->videoId, $this->textToGuess);
-
-
     }
 
+    // Method to load the current song from the database
+    public function loadCurrentSong()
+    {
+        $currentsong = Song::getSong();
+        $this->textToGuess = $currentsong->textToGuess;
+        $this->videoId = $currentsong->videoID;
+    }
 
+    // Method to sync current song to the database every 1 second
+    public function syncCurrentSong()
+    {
+        Song::updateCurrentSong($this->videoId, $this->textToGuess);
+    }
 
-
-
+    public function getCurrentSong()
+    {
+        return Song::getSong();
+    }
 }

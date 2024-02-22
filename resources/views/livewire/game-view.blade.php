@@ -1,6 +1,6 @@
 <div>
-    <div class="w-full h-full flex flex-row space-x-2">
-       <div wire:poll.750ms id="PlayerBox" class=" mx-3 my-3 h-full w-auto flex flex-col items-center border border-black space-y-1 rounded-xl">
+    <div wire:poll.750ms class="w-full h-full flex flex-row space-x-2">
+       <div  id="PlayerBox" class=" mx-3 my-3 h-full w-auto flex flex-col items-center border border-black space-y-1 rounded-xl">
            <div class="w-full h-auto flex justify-center items-center border-b border-black">
                <h1 class="mx-2">
                    Spieler Liste
@@ -31,9 +31,21 @@
                 <img src="play.png" class="w-10 h-10">
                 <h1 class="font-bold">Welcher Song ist das?</h1>
             </div>
-
+            <script>
+                var webSocket = new WebSocket("ws://localhost:8080/ws");
+                webSocket.onmessage = function(event) {
+                    console.log(event.data);
+                   console.log("WS: " + event.data);
+                   if (event.data === "Reset_song") {
+                       location.reload();
+                   }
+                };
+                function sendMessage() {
+                    webSocket.send("Reset_song");
+                }
+            </script>
             <div class="relative flex flex-col items-center">
-                <iframe class="sm:w-auto sm:h-auto md:w-[400px] md:h-[260px]" src="https://www.youtube.com/embed/{{ $videoId }}?autoplay=1&mute=0&controls=0&showinfo=0&modestbranding=1&loop=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <iframe wire:ignore id="yt_song" class="sm:w-auto sm:h-auto md:w-[400px] md:h-[260px]" src="https://www.youtube.com/embed/{{ $videoId }}?autoplay=1&mute=0&controls=0&showinfo=0&modestbranding=1&loop=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                 @if(\App\Models\GameUser::chechWin() == true)
                     <h1 class=" font-bold">
                         Song war: {{$textToGuess}}
@@ -52,8 +64,8 @@
                 <h1 class="mx-3 font-bold">ChatBox</h1>
             </div>
 
-            <div wire:poll.750ms class="overflow-y-auto h-64 w-full flex flex-col-reverse">
-                @foreach($messages->reverse() as $message)
+            <div class="overflow-y-auto h-64 w-full flex flex-col-reverse">
+                @foreach(\App\Models\Chat::getChatMessages() as $message)
                     <div class="w-full flex flex-row mx-2 my-1">
                         @if($message->correct == 1)
                             <div class="w-8 h-8 rounded-full bg-green-700 flex flex-row justify-center items-center mx-2">
@@ -73,6 +85,7 @@
             <script>
                 function resetTextBox() {
                     document.getElementById('message_box').value = "";
+                    sendMessage();
                 }
             </script>
 
@@ -90,7 +103,7 @@
                 @endif
             </div>
         </div>
-        <button onclick="resetTextBox()" wire:click="resetSong" class="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3">
+        <button onclick="sendMessage()" wire:click="resetSong" class="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3">
             Reset
         </button>
     </div>
