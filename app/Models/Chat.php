@@ -11,10 +11,15 @@ class Chat extends Model
 
 
     public static function getChatMessages(){
-        return dd(Chat::query()
+        return Chat::query()
             ->join('game_users', 'game_users.id', '=', 'chats.userid')
             ->where('game_users.id', 1)
-            ->get());
+            ->get();
+    }
+
+    public static function getChat(){
+        return Chat::query()
+            ->get();
     }
 
     public static function resetChatMessages(){
