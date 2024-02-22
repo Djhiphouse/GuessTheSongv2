@@ -92,7 +92,7 @@
             <div class="flex w-full h-auto flex-row space-x-2 items-center">
                 @if(\App\Models\GameUser::chechWin() == false)
                     <input id="message_box" wire:model="message" type="text" placeholder="Song Namen..." class="input input-bordered w-full max-w-xs ml-2" />
-                    <button onclick="resetTextBox()" wire:click="sendMsg" class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button wire:click="sendMsg" class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Senden
                     </button>
                 @else
