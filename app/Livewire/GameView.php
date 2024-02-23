@@ -34,13 +34,22 @@ class GameView extends Component
 
     public function sendMsg()
     {
-        $position = stripos(strtolower($this->textToGuess), strtolower($this->message));
-        if ($position !== false) {
+        $guess = strtolower($this->message);
+        $targetPhrase = strtolower($this->textToGuess);
+
+// Überprüfe, ob die Eingabe des Benutzers mindestens zwei Wörter enthält
+        if (str_word_count($guess) < 2) {
+            Chat::sendChatMessage("Bitte gib mindestens zwei Wörter ein.", 0);
+            return;
+        }
+
+        if (stripos($targetPhrase, $guess) !== false) {
             Chat::sendChatMessage($this->message, 1);
             GameUser::setWinning();
         } else {
             Chat::sendChatMessage($this->message, 0);
         }
+
     }
 
     public function resetSong()
