@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Chat;
 use App\Models\GameUser;
+use App\Models\Playlist;
 use App\Models\Song;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
@@ -63,7 +64,7 @@ class GameView extends Component
     // Method to fetch a new song from YouTube playlist
     public function fetchNewSong()
     {
-        $playlistId = 'PL0teFVCFk-Fo65tsvkjvl4k1mEqbaZL3P';
+        $playlistId = Playlist::getCurrentPlaylist();
         $apiKey = 'AIzaSyDiOb5xLvDzMJ32E8sbPHdQHRh1zGv8cY4'; // Replace with your actual API key
 
         $response = Http::get('https://www.googleapis.com/youtube/v3/playlistItems', [
