@@ -55,7 +55,7 @@
                 <!-- Overlay div positioned over the iframe window -->
                 <div class="absolute inset-0 h-[20%] bg-white"></div>
             </div>
-            <h1 class="font-bold text-2xl">90s Edition</h1>
+            <h1 class="font-bold text-2xl">Barbie Edition</h1>
         </div>
 
 

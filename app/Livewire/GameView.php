@@ -63,7 +63,7 @@ class GameView extends Component
     // Method to fetch a new song from YouTube playlist
     public function fetchNewSong()
     {
-        $playlistId = 'PLs7O5xs_w0WkRuh6w6gQcri57OwAZiHrf';
+        $playlistId = 'PL0teFVCFk-Fo65tsvkjvl4k1mEqbaZL3P';
         $apiKey = 'AIzaSyDiOb5xLvDzMJ32E8sbPHdQHRh1zGv8cY4'; // Replace with your actual API key
 
         $response = Http::get('https://www.googleapis.com/youtube/v3/playlistItems', [
